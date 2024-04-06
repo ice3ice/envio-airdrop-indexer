@@ -1,0 +1,37 @@
+type Schema @entity {
+  id: String!
+  schemaURI: String!
+  category: String!
+  dataSource: String!
+  reward: Int!
+  revocationTime: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Attestation @entity {
+  id: String!
+  schemaId: String!
+  nullifier: String!
+  recipient: String!
+  revocationTime: BigInt!
+  reward: Int!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Nonce @entity {
+  id: String! # nullifier + schemaId
+  revocationTime: BigInt!
+}
+
+type UserReward @entity {
+  id: String! # address
+  reward: Int!
+  blockTimestamp: BigInt!
+}
+
+type TotalReward @entity {
+  id: String!
+  reward: Int!
+}

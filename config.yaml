@@ -1,0 +1,33 @@
+name: zkPass-airdrop-indexer
+description: zkPass airdrop indexer
+#Global contract definitions that must contain all definitions except
+#addresses. Now you can share a single handler/abi/event definitions
+#for contracts across multiple chains
+contracts:
+  - name: Schema
+    abi_file_path: ./abis/schema-abi.json
+    handler: ./src/SchemaEventHandlers.js
+    events:
+      - event: SchemaRegistered(bytes32 indexed uid, address registerer, string schemaURI, string schemaData, bool revocable)
+      - event: SchemaRevoked(bytes32 indexed uid)
+  - name: Zas
+    abi_file_path: ./abis/zas-abi.json
+    handler: ./src/ZasEventHandlers.js
+    events:
+      - event: Attested(address indexed recipient, address indexed notary, address allocator, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
+      - event: Revoked(address indexed recipient, address indexed revoker, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
+networks:
+  - id: 421614 # Arbitrum Sepolia
+    start_block: 30918826
+    contracts:
+      - name: Schema #A reference to the global contract definition
+        address: "0x3d147FA2f9f9551c2DC817e8dd1d62899087EAF6"
+      - name: Zas
+        address: "0xF4cc30Ee69C2BF3D26cBa731C028BE9AeE4EcC8b"       
+  - id: 11155420 # Optimism Sepolia
+    start_block: 10305068
+    contracts:
+      - name: Schema #A reference to the global contract definition
+        address: "0xE29AD05f577222BD382c64A873C9A01544A3330E"
+      - name: Zas
+        address: "0x4E2F19B4496EEB9c04Fd16327fe9FE0610721f9D"  
