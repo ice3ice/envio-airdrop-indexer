@@ -46,7 +46,7 @@ ZasContract.Attested.handler(({ event, context }) => {
   };
 
   const schemaEntity = context.Schema.get(schemaId);
-  const reward = schemaEntity.reward;
+  let reward = schemaEntity.reward;
 
   let totalRewardEntity = context.TotalReward.get(TOTAL_REWARD_ID)
   if (!totalRewardEntity) {

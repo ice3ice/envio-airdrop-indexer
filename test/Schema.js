@@ -40,8 +40,6 @@ describe("Schema contract event tests", () => {
   });
 
   it("Schema Register", () => {
-    console.log("register...")
-
     mockDb = Schema.SchemaRegistered.processEvent({
       event: mockSchemaRegisteredEvent,
       mockDb: mockDb,
@@ -64,8 +62,6 @@ describe("Schema contract event tests", () => {
   });
 
   it("Schema Revoke", () => {
-    console.log("revoke...")
-
     mockDb = Schema.SchemaRevoked.processEvent({
       event: mockSchemaRevokedEvent,
       mockDb: mockDb,
