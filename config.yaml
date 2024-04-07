@@ -17,6 +17,13 @@ contracts:
       - event: Attested(address indexed recipient, address indexed notary, address allocator, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
       - event: Revoked(address indexed recipient, address indexed revoker, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
 networks:
+  # - id: 1 # ETH
+  #   start_block: 000
+  #   contracts:
+  #     - name: Schema
+  #       address: "0x000"
+  #     - name: Zas
+  #       address: "0x000"
   - id: 56 # BSC
     start_block: 37628015
     contracts:
@@ -24,6 +31,20 @@ networks:
         address: "0x4EE7c2e250E6964afC9E1E753D9597b87f531544"
       - name: Zas
         address: "0x876d13a8e0BE8CcA3D6897BaAdb5DcBFBc903aA2"
+  # - id: 59144 # Linea
+  #   start_block: 000
+  #   contracts:
+  #     - name: Schema
+  #       address: "0x000"
+  #     - name: Zas
+  #       address: "0x000"
+  # - id: 534352 # Scroll
+  #   start_block: 000
+  #   contracts:
+  #     - name: Schema
+  #       address: "0x000"
+  #     - name: Zas
+  #       address: "0x000"
   - id: 42161 # Arbitrum One
     start_block: 198252017
     contracts:
@@ -31,3 +52,10 @@ networks:
         address: "0xEaCbd088101759f73724dE578AadF36CEcdc3B5e"
       - name: Zas
         address: "0x3b30D7C4e5aa3d7dA11431aF23e8D1F7D25bB0B8"
+  # - id: 324 # zkSync Era
+  #   start_block: 000
+  #   contracts:
+  #     - name: Schema
+  #       address: "0x000"
+  #     - name: Zas
+  #       address: "0x000"
