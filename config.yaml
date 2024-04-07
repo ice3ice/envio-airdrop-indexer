@@ -17,17 +17,17 @@ contracts:
       - event: Attested(address indexed recipient, address indexed notary, address allocator, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
       - event: Revoked(address indexed recipient, address indexed revoker, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
 networks:
-  - id: 421614 # Arbitrum Sepolia
-    start_block: 30918825
+  - id: 56 # BSC
+    start_block: 37628015
     contracts:
-      - name: Schema #A reference to the global contract definition
-        address: "0x3d147FA2f9f9551c2DC817e8dd1d62899087EAF6"
+      - name: Schema
+        address: "0x4EE7c2e250E6964afC9E1E753D9597b87f531544"
       - name: Zas
-        address: "0xF4cc30Ee69C2BF3D26cBa731C028BE9AeE4EcC8b"       
-  - id: 11155420 # Optimism Sepolia
-    start_block: 10305067
+        address: "0x876d13a8e0BE8CcA3D6897BaAdb5DcBFBc903aA2"
+  - id: 42161 # Arbitrum One
+    start_block: 198252017
     contracts:
-      - name: Schema #A reference to the global contract definition
-        address: "0xE29AD05f577222BD382c64A873C9A01544A3330E"
+      - name: Schema
+        address: "0xEaCbd088101759f73724dE578AadF36CEcdc3B5e"
       - name: Zas
-        address: "0x4E2F19B4496EEB9c04Fd16327fe9FE0610721f9D"
+        address: "0x3b30D7C4e5aa3d7dA11431aF23e8D1F7D25bB0B8"
