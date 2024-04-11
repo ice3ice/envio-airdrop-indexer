@@ -36,6 +36,7 @@ ZasContract.Attested.handler(({ event, context }) => {
 
   const attestationEntity = {
     id: uid,
+    chainId,
     schemaId,
     nullifier,
     recipient,

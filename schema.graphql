@@ -11,6 +11,7 @@ type Schema @entity {
 
 type Attestation @entity {
   id: String!
+  chainId: Int!
   schemaId: String!
   nullifier: String!
   recipient: String!
