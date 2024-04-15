@@ -21,6 +21,8 @@ SchemaContract.SchemaRegistered.handler(({ event, context }) => {
       category: schemaData.category,
       dataSource: schemaData.dataSource,
       reward: schemaData.reward,
+      tag: schemaData.tag,
+      checkIn: schemaData.checkIn,
       revocationTime: 0,
       blockTimestamp: event.blockTimestamp,
       transactionHash: event.transactionHash

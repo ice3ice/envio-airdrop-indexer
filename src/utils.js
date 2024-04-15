@@ -2,10 +2,13 @@ const ethers = require("ethers");
 
 const parseSchemaData = (schemaData) => {
   const obj = JSON.parse(schemaData);
+
   return {
     category: obj.category,
     dataSource: obj.dataSource,
-    reward: obj.reward
+    reward: obj.reward,
+    tag: obj.tag ? obj.tag : "",
+    checkIn: obj.checkIn ? true : false
   };
 }
 

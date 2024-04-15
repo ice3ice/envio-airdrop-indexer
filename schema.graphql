@@ -4,6 +4,8 @@ type Schema @entity {
   category: String!
   dataSource: String!
   reward: Int!
+  tag: String!
+  checkIn: Boolean!
   revocationTime: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
