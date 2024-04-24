@@ -7,7 +7,6 @@ const parseSchemaData = (schemaData) => {
     category: obj.category,
     dataSource: obj.dataSource,
     reward: obj.reward,
-    tag: obj.tag ? obj.tag : "",
     checkIn: obj.checkIn ? true : false
   };
 }

@@ -45,13 +45,13 @@ networks:
         address: "0xEaCbd088101759f73724dE578AadF36CEcdc3B5e"
       - name: Zas
         address: "0x3b30D7C4e5aa3d7dA11431aF23e8D1F7D25bB0B8"
-  - id: 42161 # Arbitrum One
-    start_block: 201283015
-    contracts:
-      - name: Schema
-        address: "0xE29AD05f577222BD382c64A873C9A01544A3330E"
-      - name: Zas
-        address: "0x4E2F19B4496EEB9c04Fd16327fe9FE0610721f9D"
+  # - id: 42161 # Arbitrum One
+  #   start_block: 201283015
+  #   contracts:
+  #     - name: Schema
+  #       address: "0xE29AD05f577222BD382c64A873C9A01544A3330E"
+  #     - name: Zas
+  #       address: "0x4E2F19B4496EEB9c04Fd16327fe9FE0610721f9D"
   - id: 324 # zkSync Era
     start_block: 31566378
     contracts:
