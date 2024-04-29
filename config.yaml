@@ -25,34 +25,34 @@ networks:
   #       address: ""
   #     - name: Zas
   #       address: ""
-  # - id: 56 # BSC
-  #   start_block: 0
-  #   contracts:
-  #     - name: Schema
-  #       address: ""
-  #     - name: Zas
-  #       address: ""
-  # - id: 59144 # Linea
-  #   start_block: 0
-  #   contracts:
-  #     - name: Schema
-  #       address: ""
-  #     - name: Zas
-  #       address: ""
-  # - id: 534352 # Scroll
-  #   start_block: 0
-  #   contracts:
-  #     - name: Schema
-  #       address: ""
-  #     - name: Zas
-  #       address: ""
-  # - id: 42161 # Arbitrum One
-  #   start_block: 0
-  #   contracts:
-  #     - name: Schema
-  #       address: ""
-  #     - name: Zas
-  #       address: ""
+  - id: 56 # BSC
+    start_block: 38290127
+    contracts:
+      - name: Schema
+        address: "0xDB9323A6ADAaecA7d778E33190154C96E8913f0E"
+      - name: Zas
+        address: "0x7D3F2EE6800da3D1ad1ed5d32349a39f12342886"
+  - id: 59144 # Linea
+    start_block: 4123427
+    contracts:
+      - name: Schema
+        address: "0x922fe9530689D1AA0347daA0589b2F1961D57788"
+      - name: Zas
+        address: "0x4d0eBafdA4020A9192808a4792c6AD0A2c928ADE"
+  - id: 534352 # Scroll
+    start_block: 5238940
+    contracts:
+      - name: Schema
+        address: "0xE0748C3537Aa4110BC356e96Fa368E18dB7eD782"
+      - name: Zas
+        address: "0xb1fEFBe5E30EC4e26c42d7137A0e40C38E76E241"
+  - id: 42161 # Arbitrum One
+    start_block: 206121803 
+    contracts:
+      - name: Schema
+        address: "0x6bDeE5F216cfB9427D7309432022AB56c64093E9"
+      - name: Zas
+        address: "0x574eafbd829AB00068958e0fAC5468B644FBFa83"
   - id: 324 # zkSync Era
     start_block: 32712932
     contracts:
