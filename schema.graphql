@@ -37,3 +37,8 @@ type TotalReward @entity {
   id: String!
   reward: Int!
 }
+
+type SchemaAttestationCounter @entity {
+  id: String! # schemaId 
+  count: Int!
+}

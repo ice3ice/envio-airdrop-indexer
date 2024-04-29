@@ -35,6 +35,29 @@ SchemaContract.SchemaRegistered.handler(({ event, context }) => {
   }
 });
 
+SchemaContract.SchemaDataRevised.loader(({ event, context }) => {
+  const uid = event.params.uid.toString().toLowerCase();
+  context.Schema.load(uid);
+});
+
+SchemaContract.SchemaDataRevised.handler(({ event, context }) => {
+  const uid = event.params.uid.toString().toLowerCase();
+
+  console.log(`SchemaDataRevised for ${uid} at blockTimestamp ${event.blockTimestamp}`);
+
+  let schemaEntity = context.Schema.get(uid)
+  if (schemaEntity) {
+    const schemaData = parseSchemaData(event.params.schemaData);
+
+    schemaEntity.category = schemaData.category;
+    schemaEntity.dataSource = schemaData.dataSource;
+    schemaEntity.reward = schemaData.reward;
+    schemaEntity.checkIn = schemaData.checkIn;
+
+    context.Schema.set(schemaEntity);
+  }
+});
+
 SchemaContract.SchemaRevoked.loader(({ event, context }) => {
   const uid = event.params.uid.toString().toLowerCase();
   context.Schema.load(uid);

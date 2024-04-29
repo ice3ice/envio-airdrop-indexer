@@ -9,6 +9,7 @@ contracts:
     handler: ./src/SchemaEventHandlers.js
     events:
       - event: SchemaRegistered(bytes32 indexed uid, address registerer, string schemaURI, string schemaData, bool revocable)
+      - event: SchemaDataRevised(bytes32 indexed uid, string schemaData)
       - event: SchemaRevoked(bytes32 indexed uid)
   - name: Zas
     abi_file_path: ./abis/zas-abi.json
@@ -17,45 +18,66 @@ contracts:
       - event: Attested(address indexed recipient, address indexed notary, address allocator, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
       - event: Revoked(address indexed recipient, address indexed revoker, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
 networks:
-  - id: 1 # ETH
-    start_block: 19661154
-    contracts:
-      - name: Schema
-        address: "0x1A7FC90B1B07BBBD7A7b5f60b30235a77E02dc36"
-      - name: Zas
-        address: "0xa25FE4442D6cE311b4e27E833f2d49CAD8Ed331C"
-  - id: 56 # BSC
-    start_block: 37881816
-    contracts:
-      - name: Schema
-        address: "0x4A5082F80bac5eB5c06464c96c5d2c97b665069F"
-      - name: Zas
-        address: "0xd355644782d6dD98dD40ae3f10f4fEd21AC18182"
-  - id: 59144 # Linea
-    start_block: 3714184
-    contracts:
-      - name: Schema
-        address: "0x1a4fF088Af61F4564d43b7060cc4bE0274Bdd3d4"
-      - name: Zas
-        address: "0x5cd7B4333Dbc943e7EA5655249bEB5f49C1C1cEE"
-  - id: 534352 # Scroll
-    start_block: 4849007
-    contracts:
-      - name: Schema
-        address: "0xEaCbd088101759f73724dE578AadF36CEcdc3B5e"
-      - name: Zas
-        address: "0x3b30D7C4e5aa3d7dA11431aF23e8D1F7D25bB0B8"
-  # - id: 42161 # Arbitrum One
-  #   start_block: 201283015
+  # - id: 1 # ETH
+  #   start_block: 0
   #   contracts:
   #     - name: Schema
-  #       address: "0xE29AD05f577222BD382c64A873C9A01544A3330E"
+  #       address: ""
   #     - name: Zas
-  #       address: "0x4E2F19B4496EEB9c04Fd16327fe9FE0610721f9D"
+  #       address: ""
+  # - id: 56 # BSC
+  #   start_block: 0
+  #   contracts:
+  #     - name: Schema
+  #       address: ""
+  #     - name: Zas
+  #       address: ""
+  # - id: 59144 # Linea
+  #   start_block: 0
+  #   contracts:
+  #     - name: Schema
+  #       address: ""
+  #     - name: Zas
+  #       address: ""
+  # - id: 534352 # Scroll
+  #   start_block: 0
+  #   contracts:
+  #     - name: Schema
+  #       address: ""
+  #     - name: Zas
+  #       address: ""
+  # - id: 42161 # Arbitrum One
+  #   start_block: 0
+  #   contracts:
+  #     - name: Schema
+  #       address: ""
+  #     - name: Zas
+  #       address: ""
   - id: 324 # zkSync Era
-    start_block: 31566378
+    start_block: 32712932
     contracts:
       - name: Schema
-        address: "0x130a4A46E1bB8cAd6B43c4cA7AAab5a6Bb8780F2"
+        address: "0x49691a44Dee3A0411C5160E4cfd8f2e52Afb1D5D"
       - name: Zas
-        address: "0x1833A97522c78C8a09Ff5b4bD96519D6ACa26c15"
+        address: "0x7Ed552AbE9e2ba44cDa257D4B510a18480c161D3"
+  # - id: 10 # Optimism
+  #   start_block: 0
+  #   contracts:
+  #     - name: Schema
+  #       address: ""
+  #     - name: Zas
+  #       address: ""
+  # - id: 137 # Polygon
+  #   start_block: 0
+  #   contracts:
+  #     - name: Schema
+  #       address: ""
+  #     - name: Zas
+  #       address: ""
+  # - id: 8453 # Base
+  #   start_block: 0
+  #   contracts:
+  #     - name: Schema
+  #       address: ""
+  #     - name: Zas
+  #       address: ""

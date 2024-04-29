@@ -2,9 +2,6 @@ const ethers = require("ethers");
 
 const { Schema, Zas } = require("../generated/src/TestHelpers.bs.js");
 
-const TOTAL_REWARD_ID = "e573a447e86d91ef8e17f49bd1083b9107e32538627e0026ea5e16319702018c";
-const TOTAL_REWARD = 16000000;
-
 const blockInfo = {
   blockNumber: 0,
   blockTimestamp: 0,
@@ -122,8 +119,6 @@ const nonceHash = (schemaId, nullifier) => {
 }
 
 module.exports = {
-  TOTAL_REWARD_ID,
-  TOTAL_REWARD,
   nextBlock,
   createSchemaRegisteredEvent,
   createMockZasAttestedEvent,

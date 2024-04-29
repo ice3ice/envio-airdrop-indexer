@@ -1,8 +1,6 @@
 const { ZasContract } = require("../generated/src/Handlers.bs.js");
 const { uidHash, nonceHash } = require('./utils');
-
-const TOTAL_REWARD_ID = "e573a447e86d91ef8e17f49bd1083b9107e32538627e0026ea5e16319702018c";
-const totalRewardCount = 16000000;
+const { TotalReward } = require('./config');
 
 ZasContract.Attested.loader(({ event, context }) => {
   const chainId = event.chainId;
@@ -17,8 +15,9 @@ ZasContract.Attested.loader(({ event, context }) => {
   context.Attestation.load(uid);
   context.Schema.load(schemaId);
   context.Nonce.load(nonce);
-  context.TotalReward.load(TOTAL_REWARD_ID);
   context.UserReward.load(recipient);
+  context.TotalReward.load(TotalReward.id);
+  context.SchemaAttestationCounter.load(schemaId);
 });
 
 ZasContract.Attested.handler(({ event, context }) => {
@@ -49,15 +48,25 @@ ZasContract.Attested.handler(({ event, context }) => {
   const schemaEntity = context.Schema.get(schemaId);
   let reward = schemaEntity.reward;
 
-  let totalRewardEntity = context.TotalReward.get(TOTAL_REWARD_ID)
+  let totalRewardEntity = context.TotalReward.get(TotalReward.id);
   if (!totalRewardEntity) {
     totalRewardEntity = {
-      id: TOTAL_REWARD_ID,
-      reward: totalRewardCount,
+      id: TotalReward.id,
+      reward: TotalReward.reward,
     };
   }
 
-  let userRewardEntity = context.UserReward.get(recipient)
+  let schemaAttestationCounterEntity = context.SchemaAttestationCounter.get(schemaId);
+  if (!schemaAttestationCounterEntity) {
+    schemaAttestationCounterEntity = {
+      id: schemaId,
+      count: 1,
+    }
+  } else {
+    schemaAttestationCounterEntity.count += 1;
+  }
+
+  let userRewardEntity = context.UserReward.get(recipient);
   if (!userRewardEntity) {
     userRewardEntity = {
       id: recipient,
@@ -93,6 +102,7 @@ ZasContract.Attested.handler(({ event, context }) => {
   context.Nonce.set(nonceEntity);
   context.TotalReward.set(totalRewardEntity);
   context.UserReward.set(userRewardEntity);
+  context.SchemaAttestationCounter.set(schemaAttestationCounterEntity);
 });
 
 ZasContract.Revoked.loader(({ event, context }) => {
@@ -107,8 +117,9 @@ ZasContract.Revoked.loader(({ event, context }) => {
 
   context.Attestation.load(uid);
   context.Nonce.load(nonce);
-  context.TotalReward.load(TOTAL_REWARD_ID);
+  context.TotalReward.load(TotalReward.id);
   context.UserReward.load(recipient);
+  context.SchemaAttestationCounter.load(schemaId);
 });
 
 ZasContract.Revoked.handler(({ event, context }) => {
@@ -144,9 +155,14 @@ ZasContract.Revoked.handler(({ event, context }) => {
 
     context.UserReward.set(userRewardEntity);
 
-    const totalRewardEntity = context.TotalReward.get(TOTAL_REWARD_ID);
+    const totalRewardEntity = context.TotalReward.get(TotalReward.id);
     totalRewardEntity.reward += reward;
 
     context.TotalReward.set(totalRewardEntity);
+
+    let schemaAttestationCounterEntity = context.SchemaAttestationCounter.get(schemaId);
+    schemaAttestationCounterEntity.count -= 1;
+
+    context.SchemaAttestationCounter.set(schemaAttestationCounterEntity);
   }
 });

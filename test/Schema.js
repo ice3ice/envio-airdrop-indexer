@@ -25,6 +25,22 @@ describe("Schema contract event tests", () => {
     },
   });
 
+  const mockSchemaDataRevisedEvent = Schema.SchemaDataRevised.createMockEvent({
+    uid: "0x015fff34ed9865961f2c032e66c86cdcb3328f2f9acae1bc9ba40484c0d9c29a",
+    schemaData: `{"category":"ca2","dataSource":"ds2","reward":100,"checkIn":false}`,
+    revocable: true,
+    mockEventData: {
+      chainId: 1,
+      blockNumber: 0,
+      blockTimestamp: 0,
+      blockHash: "0x0000000000000000000000000000000000000000000000000000000000000000",
+      srcAddress: Addresses.defaultAddress,
+      transactionHash: "0x0000000000000000000000000000000000000000000000000000000000000000",
+      transactionIndex: 0,
+      logIndex: 0,
+    },
+  });
+
   const mockSchemaRevokedEvent = Schema.SchemaRevoked.createMockEvent({
     uid: "0x015fff34ed9865961f2c032e66c86cdcb3328f2f9acae1bc9ba40484c0d9c29a",
     mockEventData: {
@@ -62,6 +78,29 @@ describe("Schema contract event tests", () => {
     });
   });
 
+  it("Schema Data Revised", () => {
+    mockDb = Schema.SchemaDataRevised.processEvent({
+      event: mockSchemaDataRevisedEvent,
+      mockDb: mockDb,
+    });
+
+    const schemaEntity = mockDb.entities.Schema.get(
+      mockSchemaDataRevisedEvent.params.uid
+    );
+
+    assert.deepEqual(schemaEntity, {
+      id: '0x015fff34ed9865961f2c032e66c86cdcb3328f2f9acae1bc9ba40484c0d9c29a',
+      schemaURI: 'https://schema.zkpass.org/schema.json',
+      revocationTime: 0,
+      category: 'ca2',
+      dataSource: 'ds2',
+      reward: 100,
+      checkIn: false,
+      blockTimestamp: 0,
+      transactionHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
+    });
+  });
+
   it("Schema Revoke", () => {
     mockDb = Schema.SchemaRevoked.processEvent({
       event: mockSchemaRevokedEvent,
@@ -76,10 +115,10 @@ describe("Schema contract event tests", () => {
       id: '0x015fff34ed9865961f2c032e66c86cdcb3328f2f9acae1bc9ba40484c0d9c29a',
       schemaURI: 'https://schema.zkpass.org/schema.json',
       revocationTime: 1,
-      category: 'ca',
-      dataSource: 'ds',
-      reward: 10,
-      checkIn: true,
+      category: 'ca2',
+      dataSource: 'ds2',
+      reward: 100,
+      checkIn: false,
       blockTimestamp: 0,
       transactionHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
     });

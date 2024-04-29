@@ -3,7 +3,9 @@ const assert = require("assert");
 const { MockDb, Schema, Zas } = require("../generated/src/TestHelpers.bs.js");
 const { Addresses } = require("../generated/src/bindings/Ethers.bs.js");
 
-const { TOTAL_REWARD_ID, TOTAL_REWARD, nextBlock, createSchemaRegisteredEvent, createMockZasAttestedEvent, createMockZasRevokedEvent, uidHash, nonceHash } = require("./utils");
+const { nextBlock, createSchemaRegisteredEvent, createMockZasAttestedEvent, createMockZasRevokedEvent, uidHash, nonceHash } = require("./utils");
+const { TotalReward } = require("../src/config");
+
 
 const mockData = {
   chainId: 1,
@@ -56,8 +58,11 @@ describe("ZAS contract event tests", () => {
     assert.equal(userRewardEntity.id, recipient.toLowerCase());
     assert.equal(userRewardEntity.reward, mockData.schema.reward);
 
-    let totalRewardEntity = mockDb.entities.TotalReward.get(TOTAL_REWARD_ID);
-    assert.equal(totalRewardEntity.reward, TOTAL_REWARD - mockData.schema.reward);
+    let totalRewardEntity = mockDb.entities.TotalReward.get(TotalReward.id);
+    assert.equal(totalRewardEntity.reward, TotalReward.reward - mockData.schema.reward);
+
+    let schemaAttestationCounterEntity = mockDb.entities.SchemaAttestationCounter.get(mockData.schema.uid);
+    assert.equal(schemaAttestationCounterEntity.count, 1);
   });
 
   it("ZAS Revoke", () => {
@@ -84,8 +89,11 @@ describe("ZAS contract event tests", () => {
     assert.equal(userRewardEntity.id, recipient.toLowerCase());
     assert.equal(userRewardEntity.reward, 0);
 
-    let totalRewardEntity = mockDb.entities.TotalReward.get(TOTAL_REWARD_ID);
-    assert.equal(totalRewardEntity.reward, TOTAL_REWARD);
+    let totalRewardEntity = mockDb.entities.TotalReward.get(TotalReward.id);
+    assert.equal(totalRewardEntity.reward, TotalReward.reward);
+
+    let schemaAttestationCounterEntity = mockDb.entities.SchemaAttestationCounter.get(mockData.schema.uid);
+    assert.equal(schemaAttestationCounterEntity.count, 0);
   });
 
   it("ZAS Attest Duplicate", () => {
@@ -129,7 +137,10 @@ describe("ZAS contract event tests", () => {
     assert.equal(userRewardEntity.id, recipient.toLowerCase());
     assert.equal(userRewardEntity.reward, mockData.schema.reward);
 
-    let totalRewardEntity = mockDb.entities.TotalReward.get(TOTAL_REWARD_ID);
-    assert.equal(totalRewardEntity.reward, TOTAL_REWARD - mockData.schema.reward);
+    let totalRewardEntity = mockDb.entities.TotalReward.get(TotalReward.id);
+    assert.equal(totalRewardEntity.reward, TotalReward.reward - mockData.schema.reward);
+
+    let schemaAttestationCounterEntity = mockDb.entities.SchemaAttestationCounter.get(mockData.schema.uid);
+    assert.equal(schemaAttestationCounterEntity.count, 2);
   });
 });
