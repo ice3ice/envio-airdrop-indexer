@@ -1,7 +1,17 @@
 const ethers = require("ethers");
 
 const parseSchemaData = (schemaData) => {
-  const obj = JSON.parse(schemaData);
+  let obj = null;
+  try {
+    obj = JSON.parse(schemaData);
+  } catch (err) {
+    return {
+      category: "error",
+      dataSource: "error",
+      reward: 0,
+      checkIn: false
+    }
+  }
 
   return {
     category: obj.category,
