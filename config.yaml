@@ -60,13 +60,13 @@ networks:
         address: "0x49691a44Dee3A0411C5160E4cfd8f2e52Afb1D5D"
       - name: Zas
         address: "0x7Ed552AbE9e2ba44cDa257D4B510a18480c161D3"
-  # - id: 10 # Optimism
-  #   start_block: 0
-  #   contracts:
-  #     - name: Schema
-  #       address: ""
-  #     - name: Zas
-  #       address: ""
+  - id: 10 # Optimism
+    start_block: 119435096
+    contracts:
+      - name: Schema
+        address: "0xEaCbd088101759f73724dE578AadF36CEcdc3B5e"
+      - name: Zas
+        address: "0x3b30D7C4e5aa3d7dA11431aF23e8D1F7D25bB0B8"
   # - id: 137 # Polygon
   #   start_block: 0
   #   contracts:
@@ -74,10 +74,10 @@ networks:
   #       address: ""
   #     - name: Zas
   #       address: ""
-  # - id: 8453 # Base
-  #   start_block: 0
-  #   contracts:
-  #     - name: Schema
-  #       address: ""
-  #     - name: Zas
-  #       address: ""
+  - id: 8453 # Base
+    start_block: 13840270
+    contracts:
+      - name: Schema
+        address: "0xEaCbd088101759f73724dE578AadF36CEcdc3B5e"
+      - name: Zas
+        address: "0x3b30D7C4e5aa3d7dA11431aF23e8D1F7D25bB0B8"
