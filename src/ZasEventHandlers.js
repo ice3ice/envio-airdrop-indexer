@@ -107,6 +107,7 @@ ZasContract.Attested.handler(({ event, context }) => {
   userRewardEntity.blockTimestamp = event.blockTimestamp;
 
   userDailyRewardEntity.reward += reward;
+  userDailyRewardEntity.blockTimestamp = event.blockTimestamp;
 
   attestationEntity.reward = reward;
 
