@@ -58,6 +58,10 @@ describe("ZAS contract event tests", () => {
     assert.equal(userRewardEntity.id, recipient.toLowerCase());
     assert.equal(userRewardEntity.reward, mockData.schema.reward);
 
+    let userDailyRewardEntity = mockDb.entities.UserDailyReward.get(recipient.toLowerCase());
+    assert.equal(userDailyRewardEntity.id, recipient.toLowerCase());
+    assert.equal(userDailyRewardEntity.reward, mockData.schema.reward);
+
     let totalRewardEntity = mockDb.entities.TotalReward.get(TotalReward.id);
     assert.equal(totalRewardEntity.reward, TotalReward.reward - mockData.schema.reward);
 
@@ -88,6 +92,10 @@ describe("ZAS contract event tests", () => {
     let userRewardEntity = mockDb.entities.UserReward.get(recipient.toLowerCase());
     assert.equal(userRewardEntity.id, recipient.toLowerCase());
     assert.equal(userRewardEntity.reward, 0);
+
+    let userDailyRewardEntity = mockDb.entities.UserDailyReward.get(recipient.toLowerCase());
+    assert.equal(userDailyRewardEntity.id, recipient.toLowerCase());
+    assert.equal(userDailyRewardEntity.reward, 0);
 
     let totalRewardEntity = mockDb.entities.TotalReward.get(TotalReward.id);
     assert.equal(totalRewardEntity.reward, TotalReward.reward);

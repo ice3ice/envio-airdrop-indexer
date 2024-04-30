@@ -1,4 +1,5 @@
 const ethers = require("ethers");
+const moment = require("moment");
 
 const parseSchemaData = (schemaData) => {
   let obj = null;
@@ -40,8 +41,13 @@ const nonceHash = (schemaId, nullifier) => {
   return "0x" + nonce;
 }
 
+const todayTimestamp = () => {
+  return moment().startOf("day").unix();
+}
+
 module.exports = {
   parseSchemaData,
   uidHash,
   nonceHash,
+  todayTimestamp,
 };

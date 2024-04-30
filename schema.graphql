@@ -33,6 +33,12 @@ type UserReward @entity {
   blockTimestamp: BigInt!
 }
 
+type UserDailyReward @entity {
+  id: String! # address
+  reward: Int!
+  blockTimestamp: BigInt!
+}
+
 type TotalReward @entity {
   id: String!
   reward: Int!
@@ -42,3 +48,4 @@ type SchemaAttestationCounter @entity {
   id: String! # schemaId 
   count: Int!
 }
+

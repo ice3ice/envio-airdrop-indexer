@@ -1,5 +1,5 @@
 const { ZasContract } = require("../generated/src/Handlers.bs.js");
-const { uidHash, nonceHash } = require('./utils');
+const { uidHash, nonceHash, todayTimestamp } = require('./utils');
 const { TotalReward } = require('./config');
 
 ZasContract.Attested.loader(({ event, context }) => {
@@ -16,6 +16,7 @@ ZasContract.Attested.loader(({ event, context }) => {
   context.Schema.load(schemaId);
   context.Nonce.load(nonce);
   context.UserReward.load(recipient);
+  context.UserDailyReward.load(recipient);
   context.TotalReward.load(TotalReward.id);
   context.SchemaAttestationCounter.load(schemaId);
 });
@@ -75,6 +76,15 @@ ZasContract.Attested.handler(({ event, context }) => {
     };
   }
 
+  let userDailyRewardEntity = context.UserDailyReward.get(recipient);
+  if (!userDailyRewardEntity || userDailyRewardEntity.blockTimestamp < todayTimestamp()) {
+    userDailyRewardEntity = {
+      id: recipient,
+      reward: 0,
+      blockTimestamp: event.blockTimestamp,
+    };
+  }
+
   let nonceEntity = context.Nonce.get(nonce);
   if (!nonceEntity) {
     nonceEntity = {
@@ -96,12 +106,15 @@ ZasContract.Attested.handler(({ event, context }) => {
   userRewardEntity.reward += reward;
   userRewardEntity.blockTimestamp = event.blockTimestamp;
 
+  userDailyRewardEntity.reward += reward;
+
   attestationEntity.reward = reward;
 
   context.Attestation.set(attestationEntity);
   context.Nonce.set(nonceEntity);
   context.TotalReward.set(totalRewardEntity);
   context.UserReward.set(userRewardEntity);
+  context.UserDailyReward.set(userDailyRewardEntity);
   context.SchemaAttestationCounter.set(schemaAttestationCounterEntity);
 });
 
@@ -119,6 +132,7 @@ ZasContract.Revoked.loader(({ event, context }) => {
   context.Nonce.load(nonce);
   context.TotalReward.load(TotalReward.id);
   context.UserReward.load(recipient);
+  context.UserDailyReward.load(recipient);
   context.SchemaAttestationCounter.load(schemaId);
 });
 
@@ -154,6 +168,12 @@ ZasContract.Revoked.handler(({ event, context }) => {
     userRewardEntity.reward -= reward;
 
     context.UserReward.set(userRewardEntity);
+
+    const userDailyRewardEntity = context.UserDailyReward.get(recipient);
+    userDailyRewardEntity.reward -= reward;
+    userDailyRewardEntity.blockTimestamp = event.blockTimestamp;
+
+    context.UserDailyReward.set(userDailyRewardEntity);
 
     const totalRewardEntity = context.TotalReward.get(TotalReward.id);
     totalRewardEntity.reward += reward;
