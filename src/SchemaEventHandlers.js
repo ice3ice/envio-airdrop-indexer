@@ -9,7 +9,7 @@ SchemaContract.SchemaRegistered.loader(({ event, context }) => {
 SchemaContract.SchemaRegistered.handler(({ event, context }) => {
   const uid = event.params.uid.toString().toLowerCase();
 
-  console.log(`SchemaRegistered for ${uid} at blockTimestamp ${event.blockTimestamp}`);
+  // console.log(`SchemaRegistered for ${uid} at blockTimestamp ${event.blockTimestamp}`);
 
   let schemaEntity = context.Schema.get(uid)
   if (!schemaEntity) {
@@ -43,7 +43,7 @@ SchemaContract.SchemaDataRevised.loader(({ event, context }) => {
 SchemaContract.SchemaDataRevised.handler(({ event, context }) => {
   const uid = event.params.uid.toString().toLowerCase();
 
-  console.log(`SchemaDataRevised for ${uid} at blockTimestamp ${event.blockTimestamp}`);
+  // console.log(`SchemaDataRevised for ${uid} at blockTimestamp ${event.blockTimestamp}`);
 
   let schemaEntity = context.Schema.get(uid)
   if (schemaEntity) {
@@ -66,7 +66,7 @@ SchemaContract.SchemaRevoked.loader(({ event, context }) => {
 SchemaContract.SchemaRevoked.handler(({ event, context }) => {
   const uid = event.params.uid.toString().toLowerCase();
 
-  console.log(`SchemaRevoked for ${uid} at blockTimestamp ${event.blockTimestamp}`);
+  // console.log(`SchemaRevoked for ${uid} at blockTimestamp ${event.blockTimestamp}`);
 
   const schemaEntity = context.Schema.get(uid);
   if (schemaEntity && schemaEntity.revocationTime == 0) {
