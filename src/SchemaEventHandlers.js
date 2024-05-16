@@ -9,7 +9,7 @@ SchemaContract.SchemaRegistered.loader(({ event, context }) => {
 SchemaContract.SchemaRegistered.handler(({ event, context }) => {
   const uid = event.params.uid.toString().toLowerCase();
 
-  // console.log(`SchemaRegistered for ${uid} at blockTimestamp ${event.blockTimestamp}`);
+  console.log(`SchemaRegistered for ${uid} at blockTimestamp ${event.blockTimestamp}`);
 
   let schemaEntity = context.Schema.get(uid)
   if (!schemaEntity) {
