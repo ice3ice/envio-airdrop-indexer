@@ -81,3 +81,10 @@ networks:
         address: "0xEaCbd088101759f73724dE578AadF36CEcdc3B5e"
       - name: Zas
         address: "0x3b30D7C4e5aa3d7dA11431aF23e8D1F7D25bB0B8"
+  - id: 196 # XLayer
+    start_block: 1672795
+    contracts:
+      - name: Schema
+        address: "0x90b7164F39446c196b488A9F4441702C3Fa74646"
+      - name: Zas
+        address: "0x44223d775CaA443fE68F31f49cbF16af2bc1EcE3"
