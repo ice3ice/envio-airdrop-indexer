@@ -141,7 +141,7 @@ ZasContract.Revoked.handler(({ event, context }) => {
   const chainId = event.chainId;
   const schemaId = event.params.schema.toString().toLowerCase();
 
-  console.log(`revoked for ${schemaId} on ${chainId} at blockTimestamp ${event.blockTimestamp}`);
+  // console.log(`revoked for ${schemaId} on ${chainId} at blockTimestamp ${event.blockTimestamp}`);
 
   let uid = event.params.uid.toString().toLowerCase();
   uid = uidHash(uid, chainId);
