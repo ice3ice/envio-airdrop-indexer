@@ -17,6 +17,7 @@ contracts:
     events:
       - event: Attested(address indexed recipient, address indexed notary, address allocator, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
       - event: Revoked(address indexed recipient, address indexed revoker, bytes32 uid, bytes32 indexed schema, bytes32 nullifier)
+unordered_multichain_mode: true
 networks:
   # - id: 1 # ETH
   #   start_block: 0
