@@ -1,5 +1,5 @@
-type Schema @entity {
-  id: String!
+type ZSchema {
+  id: ID!
   schemaURI: String!
   category: String!
   dataSource: String!
@@ -10,8 +10,8 @@ type Schema @entity {
   transactionHash: Bytes!
 }
 
-type Attestation @entity {
-  id: String!
+type Attestation {
+  id: ID!
   chainId: Int!
   schemaId: String!
   nullifier: String!
@@ -22,30 +22,30 @@ type Attestation @entity {
   transactionHash: Bytes!
 }
 
-type Nonce @entity {
-  id: String! # nullifier + schemaId
+type Nonce {
+  id: ID!
   revocationTime: BigInt!
 }
 
-type UserReward @entity {
-  id: String! # address
+type UserReward {
+  id: ID!
   reward: Int!
   blockTimestamp: BigInt!
 }
 
-type UserDailyReward @entity {
-  id: String! # address
+type UserDailyReward {
+  id: ID!
   reward: Int!
   blockTimestamp: BigInt!
 }
 
-type TotalReward @entity {
-  id: String!
+type TotalReward {
+  id: ID!
   reward: Int!
 }
 
-type SchemaAttestationCounter @entity {
-  id: String! # schemaId 
+type SchemaAttestationCounter {
+  id: ID!
   count: Int!
 }
 

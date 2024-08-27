@@ -1,17 +1,12 @@
-const { SchemaContract } = require("../generated/src/Handlers.bs.js");
+const { Schema } = require("../generated");
 const { parseSchemaData } = require('./utils');
 
-SchemaContract.SchemaRegistered.loader(({ event, context }) => {
-  const uid = event.params.uid.toString().toLowerCase();
-  context.Schema.load(uid);
-});
-
-SchemaContract.SchemaRegistered.handler(({ event, context }) => {
+Schema.SchemaRegistered.handler(async ({ event, context }) => {
   const uid = event.params.uid.toString().toLowerCase();
 
-  // console.log(`SchemaRegistered for ${uid} at blockTimestamp ${event.blockTimestamp}`);
+  // console.log(`SchemaRegistered for ${uid} at blockTimestamp ${event.block.timestamp}`);
 
-  let schemaEntity = context.Schema.get(uid)
+  let schemaEntity = await context.ZSchema.get(uid)
   if (!schemaEntity) {
     const schemaData = parseSchemaData(event.params.schemaData);
 
@@ -23,29 +18,24 @@ SchemaContract.SchemaRegistered.handler(({ event, context }) => {
       reward: schemaData.reward,
       checkIn: schemaData.checkIn,
       revocationTime: 0,
-      blockTimestamp: event.blockTimestamp,
-      transactionHash: event.transactionHash
+      blockTimestamp: event.block.timestamp,
+      transactionHash: event.block.hash,
     };
 
-    context.Schema.set(schemaEntity);
+    context.ZSchema.set(schemaEntity);
   } else if (schemaEntity.revocationTime > 0) {
     schemaEntity.revocationTime = 0;
 
-    context.Schema.set(schemaEntity);
+    context.ZSchema.set(schemaEntity);
   }
 });
 
-SchemaContract.SchemaDataRevised.loader(({ event, context }) => {
-  const uid = event.params.uid.toString().toLowerCase();
-  context.Schema.load(uid);
-});
-
-SchemaContract.SchemaDataRevised.handler(({ event, context }) => {
+Schema.SchemaDataRevised.handler(async ({ event, context }) => {
   const uid = event.params.uid.toString().toLowerCase();
 
-  // console.log(`SchemaDataRevised for ${uid} at blockTimestamp ${event.blockTimestamp}`);
+  // console.log(`SchemaDataRevised for ${uid} at blockTimestamp ${event.block.timestamp}`);
 
-  let schemaEntity = context.Schema.get(uid)
+  let schemaEntity = await context.ZSchema.get(uid)
   if (schemaEntity) {
     const schemaData = parseSchemaData(event.params.schemaData);
 
@@ -54,23 +44,19 @@ SchemaContract.SchemaDataRevised.handler(({ event, context }) => {
     schemaEntity.reward = schemaData.reward;
     schemaEntity.checkIn = schemaData.checkIn;
 
-    context.Schema.set(schemaEntity);
+    context.ZSchema.set(schemaEntity);
   }
 });
 
-SchemaContract.SchemaRevoked.loader(({ event, context }) => {
-  const uid = event.params.uid.toString().toLowerCase();
-  context.Schema.load(uid);
-});
 
-SchemaContract.SchemaRevoked.handler(({ event, context }) => {
+Schema.SchemaRevoked.handler(async ({ event, context }) => {
   const uid = event.params.uid.toString().toLowerCase();
 
-  // console.log(`SchemaRevoked for ${uid} at blockTimestamp ${event.blockTimestamp}`);
+  // console.log(`SchemaRevoked for ${uid} at blockTimestamp ${event.block.timestamp}`);
 
-  const schemaEntity = context.Schema.get(uid);
+  const schemaEntity = await context.ZSchema.get(uid);
   if (schemaEntity && schemaEntity.revocationTime == 0) {
-    schemaEntity.revocationTime = event.blockTimestamp;
-    context.Schema.set(schemaEntity);
+    schemaEntity.revocationTime = event.block.timestamp;
+    context.ZSchema.set(schemaEntity);
   }
 });

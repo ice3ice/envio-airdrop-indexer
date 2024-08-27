@@ -1,31 +1,13 @@
-const { ZasContract } = require("../generated/src/Handlers.bs.js");
+const { Zas } = require("../generated");
 const { uidHash, nonceHash, todayTimestamp } = require('./utils');
 const { TotalReward } = require('./config');
 
-ZasContract.Attested.loader(({ event, context }) => {
-  const chainId = event.chainId;
-  let uid = event.params.uid.toString().toLowerCase();
-  const schemaId = event.params.schema.toString().toLowerCase();
-  const recipient = event.params.recipient.toString().toLowerCase();
-  const nullifier = event.params.nullifier.toString().toLowerCase();
 
-  uid = uidHash(uid, chainId);
-  const nonce = nonceHash(schemaId, nullifier);
-
-  context.Attestation.load(uid);
-  context.Schema.load(schemaId);
-  context.Nonce.load(nonce);
-  context.UserReward.load(recipient);
-  context.UserDailyReward.load(recipient);
-  context.TotalReward.load(TotalReward.id);
-  context.SchemaAttestationCounter.load(schemaId);
-});
-
-ZasContract.Attested.handler(({ event, context }) => {
+Zas.Attested.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const schemaId = event.params.schema.toString().toLowerCase();
 
-  console.log(`attested for ${schemaId} on ${chainId} at blockTimestamp ${event.blockTimestamp}`);
+  // console.log(`attested for ${schemaId} on ${chainId} at blockTimestamp ${event.block.timestamp}`);
 
   let uid = event.params.uid.toString().toLowerCase();
   uid = uidHash(uid, chainId);
@@ -42,14 +24,14 @@ ZasContract.Attested.handler(({ event, context }) => {
     recipient,
     revocationTime: 0,
     reward: 0,
-    blockTimestamp: event.blockTimestamp,
-    transactionHash: event.transactionHash
+    blockTimestamp: event.block.timestamp,
+    transactionHash: event.block.hash
   };
 
-  const schemaEntity = context.Schema.get(schemaId);
+  const schemaEntity = await context.ZSchema.get(schemaId);
   let reward = schemaEntity.reward;
 
-  let totalRewardEntity = context.TotalReward.get(TotalReward.id);
+  let totalRewardEntity = await context.TotalReward.get(TotalReward.id);
   if (!totalRewardEntity) {
     totalRewardEntity = {
       id: TotalReward.id,
@@ -57,7 +39,7 @@ ZasContract.Attested.handler(({ event, context }) => {
     };
   }
 
-  let schemaAttestationCounterEntity = context.SchemaAttestationCounter.get(schemaId);
+  let schemaAttestationCounterEntity = await context.SchemaAttestationCounter.get(schemaId);
   if (!schemaAttestationCounterEntity) {
     schemaAttestationCounterEntity = {
       id: schemaId,
@@ -67,7 +49,7 @@ ZasContract.Attested.handler(({ event, context }) => {
     schemaAttestationCounterEntity.count += 1;
   }
 
-  let userRewardEntity = context.UserReward.get(recipient);
+  let userRewardEntity = await context.UserReward.get(recipient);
   if (!userRewardEntity) {
     userRewardEntity = {
       id: recipient,
@@ -76,16 +58,16 @@ ZasContract.Attested.handler(({ event, context }) => {
     };
   }
 
-  let userDailyRewardEntity = context.UserDailyReward.get(recipient);
+  let userDailyRewardEntity = await context.UserDailyReward.get(recipient);
   if (!userDailyRewardEntity || userDailyRewardEntity.blockTimestamp < todayTimestamp()) {
     userDailyRewardEntity = {
       id: recipient,
       reward: 0,
-      blockTimestamp: event.blockTimestamp,
+      blockTimestamp: event.block.timestamp,
     };
   }
 
-  let nonceEntity = context.Nonce.get(nonce);
+  let nonceEntity = await context.Nonce.get(nonce);
   if (!nonceEntity) {
     nonceEntity = {
       id: nonce,
@@ -104,10 +86,10 @@ ZasContract.Attested.handler(({ event, context }) => {
   totalRewardEntity.reward -= reward;
 
   userRewardEntity.reward += reward;
-  userRewardEntity.blockTimestamp = event.blockTimestamp;
+  userRewardEntity.blockTimestamp = event.block.timestamp;
 
   userDailyRewardEntity.reward += reward;
-  userDailyRewardEntity.blockTimestamp = event.blockTimestamp;
+  userDailyRewardEntity.blockTimestamp = event.block.timestamp;
 
   attestationEntity.reward = reward;
 
@@ -119,25 +101,7 @@ ZasContract.Attested.handler(({ event, context }) => {
   context.SchemaAttestationCounter.set(schemaAttestationCounterEntity);
 });
 
-ZasContract.Revoked.loader(({ event, context }) => {
-  const chainId = event.chainId;
-  let uid = event.params.uid.toString().toLowerCase();
-  const schemaId = event.params.schema.toString().toLowerCase();
-  const recipient = event.params.recipient.toString().toLowerCase();
-  const nullifier = event.params.nullifier.toString().toLowerCase();
-
-  uid = uidHash(uid, chainId);
-  const nonce = nonceHash(schemaId, nullifier);
-
-  context.Attestation.load(uid);
-  context.Nonce.load(nonce);
-  context.TotalReward.load(TotalReward.id);
-  context.UserReward.load(recipient);
-  context.UserDailyReward.load(recipient);
-  context.SchemaAttestationCounter.load(schemaId);
-});
-
-ZasContract.Revoked.handler(({ event, context }) => {
+Zas.Revoked.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const schemaId = event.params.schema.toString().toLowerCase();
 
@@ -150,38 +114,38 @@ ZasContract.Revoked.handler(({ event, context }) => {
   const nullifier = event.params.nullifier.toString().toLowerCase();
   const nonce = nonceHash(schemaId, nullifier);
 
-  let attestationEntity = context.Attestation.get(uid);
+  let attestationEntity = await context.Attestation.get(uid);
 
   if (attestationEntity) {
     const reward = attestationEntity.reward;
 
-    attestationEntity.revocationTime = event.blockTimestamp;
+    attestationEntity.revocationTime = event.block.timestamp;
     attestationEntity.reward = 0;
 
     context.Attestation.set(attestationEntity);
 
-    const nonceEntity = context.Nonce.get(nonce);
-    nonceEntity.revocationTime = event.blockTimestamp;
+    const nonceEntity = await context.Nonce.get(nonce);
+    nonceEntity.revocationTime = event.block.timestamp;
 
     context.Nonce.set(nonceEntity);
 
-    const userRewardEntity = context.UserReward.get(recipient);
+    const userRewardEntity = await context.UserReward.get(recipient);
     userRewardEntity.reward -= reward;
 
     context.UserReward.set(userRewardEntity);
 
-    const userDailyRewardEntity = context.UserDailyReward.get(recipient);
+    const userDailyRewardEntity = await context.UserDailyReward.get(recipient);
     userDailyRewardEntity.reward -= reward;
-    userDailyRewardEntity.blockTimestamp = event.blockTimestamp;
+    userDailyRewardEntity.blockTimestamp = event.block.timestamp;
 
     context.UserDailyReward.set(userDailyRewardEntity);
 
-    const totalRewardEntity = context.TotalReward.get(TotalReward.id);
+    const totalRewardEntity = await context.TotalReward.get(TotalReward.id);
     totalRewardEntity.reward += reward;
 
     context.TotalReward.set(totalRewardEntity);
 
-    let schemaAttestationCounterEntity = context.SchemaAttestationCounter.get(schemaId);
+    let schemaAttestationCounterEntity = await context.SchemaAttestationCounter.get(schemaId);
     schemaAttestationCounterEntity.count -= 1;
 
     context.SchemaAttestationCounter.set(schemaAttestationCounterEntity);

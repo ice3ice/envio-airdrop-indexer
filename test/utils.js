@@ -42,13 +42,17 @@ const createSchemaRegisteredEvent = (chainId, uid, schemaURI, schemaData) => {
     revocable: true,
     mockEventData: {
       chainId,
-      blockNumber: blockInfo.blockNumber,
-      blockTimestamp: blockInfo.blockTimestamp,
-      blockHash: blockInfo.blockHash,
       srcAddress: schemaRegisterAddress,
-      transactionHash: blockInfo.transactionHash,
-      transactionIndex: blockInfo.transactionIndex,
       logIndex: 0,
+      block: {
+        number: blockInfo.blockNumber,
+        timestamp: blockInfo.blockTimestamp,
+        hash: blockInfo.blockHash
+      },
+      transaction: {
+        index: blockInfo.transactionIndex,
+        hash: blockInfo.transactionHash,
+      },
     },
   });
 
@@ -65,13 +69,17 @@ const createMockZasAttestedEvent = (chainId, recipient, uid, schema, nullifier) 
     nullifier,
     mockEventData: {
       chainId,
-      blockNumber: blockInfo.blockNumber,
-      blockTimestamp: blockInfo.blockTimestamp,
-      blockHash: blockInfo.blockHash,
       srcAddress: recipient,
-      transactionHash: blockInfo.transactionHash,
-      transactionIndex: blockInfo.transactionIndex,
       logIndex: 0,
+      block: {
+        number: blockInfo.blockNumber,
+        timestamp: blockInfo.blockTimestamp,
+        hash: blockInfo.blockHash
+      },
+      transaction: {
+        index: blockInfo.transactionIndex,
+        hash: blockInfo.transactionHash,
+      },
     },
   });
 
@@ -87,13 +95,17 @@ const createMockZasRevokedEvent = (chainId, recipient, uid, schema, nullifier) =
     nullifier,
     mockEventData: {
       chainId,
-      blockNumber: blockInfo.blockNumber,
-      blockTimestamp: blockInfo.blockTimestamp,
-      blockHash: blockInfo.blockHash,
       srcAddress: recipient,
-      transactionHash: blockInfo.transactionHash,
-      transactionIndex: blockInfo.transactionIndex,
       logIndex: 0,
+      block: {
+        number: blockInfo.blockNumber,
+        timestamp: blockInfo.blockTimestamp,
+        hash: blockInfo.blockHash
+      },
+      transaction: {
+        index: blockInfo.transactionIndex,
+        hash: blockInfo.transactionHash,
+      },
     },
   });
 

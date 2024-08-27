@@ -28,13 +28,13 @@ describe("ZAS contract event tests", () => {
   const mockSchemaRegisteredEvent = createSchemaRegisteredEvent(mockData.chainId, mockData.schema.uid, mockData.schema.schemaURI, mockData.schema.schemaData)
 
   before(async () => {
-    mockDb = Schema.SchemaRegistered.processEvent({
+    mockDb = await Schema.SchemaRegistered.processEvent({
       event: mockSchemaRegisteredEvent,
       mockDb: mockDb,
     });
   });
 
-  it("ZAS Attest", () => {
+  it("ZAS Attest", async () => {
     nextBlock();
 
     let recipient = Addresses.defaultAddress;
@@ -42,34 +42,34 @@ describe("ZAS contract event tests", () => {
     let mockZasAttestedEvent = createMockZasAttestedEvent(
       mockData.chainId, recipient, mockData.attestation.uid, mockData.schema.uid, mockData.attestation.nullifier);
 
-    mockDb = Zas.Attested.processEvent({
+    mockDb = await Zas.Attested.processEvent({
       event: mockZasAttestedEvent,
       mockDb: mockDb,
     });
 
-    let nonceEntity = mockDb.entities.Nonce.get(nonceHash(mockData.schema.uid, mockData.attestation.nullifier));
+    let nonceEntity = await mockDb.entities.Nonce.get(nonceHash(mockData.schema.uid, mockData.attestation.nullifier));
     assert.equal(nonceEntity.revocationTime, 0);
 
-    let attestationEntity = mockDb.entities.Attestation.get(uidHash(mockData.attestation.uid, mockData.chainId));
+    let attestationEntity = await mockDb.entities.Attestation.get(uidHash(mockData.attestation.uid, mockData.chainId));
     assert.equal(attestationEntity.revocationTime, 0);
     assert.equal(attestationEntity.reward, mockData.schema.reward);
 
-    let userRewardEntity = mockDb.entities.UserReward.get(recipient.toLowerCase());
+    let userRewardEntity = await mockDb.entities.UserReward.get(recipient.toLowerCase());
     assert.equal(userRewardEntity.id, recipient.toLowerCase());
     assert.equal(userRewardEntity.reward, mockData.schema.reward);
 
-    let userDailyRewardEntity = mockDb.entities.UserDailyReward.get(recipient.toLowerCase());
+    let userDailyRewardEntity = await mockDb.entities.UserDailyReward.get(recipient.toLowerCase());
     assert.equal(userDailyRewardEntity.id, recipient.toLowerCase());
     assert.equal(userDailyRewardEntity.reward, mockData.schema.reward);
 
-    let totalRewardEntity = mockDb.entities.TotalReward.get(TotalReward.id);
+    let totalRewardEntity = await mockDb.entities.TotalReward.get(TotalReward.id);
     assert.equal(totalRewardEntity.reward, TotalReward.reward - mockData.schema.reward);
 
-    let schemaAttestationCounterEntity = mockDb.entities.SchemaAttestationCounter.get(mockData.schema.uid);
+    let schemaAttestationCounterEntity = await mockDb.entities.SchemaAttestationCounter.get(mockData.schema.uid);
     assert.equal(schemaAttestationCounterEntity.count, 1);
   });
 
-  it("ZAS Revoke", () => {
+  it("ZAS Revoke", async () => {
     let blockTimestamp = nextBlock();
 
     let recipient = Addresses.defaultAddress;
@@ -77,34 +77,34 @@ describe("ZAS contract event tests", () => {
     const mockZasRevokedEvent = createMockZasRevokedEvent(
       mockData.chainId, recipient, mockData.attestation.uid, mockData.schema.uid, mockData.attestation.nullifier);
 
-    mockDb = Zas.Revoked.processEvent({
+    mockDb = await Zas.Revoked.processEvent({
       event: mockZasRevokedEvent,
       mockDb: mockDb,
     });
 
-    let nonceEntity = mockDb.entities.Nonce.get(nonceHash(mockData.schema.uid, mockData.attestation.nullifier));
+    let nonceEntity = await mockDb.entities.Nonce.get(nonceHash(mockData.schema.uid, mockData.attestation.nullifier));
     assert.equal(nonceEntity.revocationTime, blockTimestamp);
 
-    let attestationEntity = mockDb.entities.Attestation.get(uidHash(mockData.attestation.uid, mockData.chainId));
+    let attestationEntity = await mockDb.entities.Attestation.get(uidHash(mockData.attestation.uid, mockData.chainId));
     assert.equal(attestationEntity.revocationTime, blockTimestamp);
     assert.equal(attestationEntity.reward, 0);
 
-    let userRewardEntity = mockDb.entities.UserReward.get(recipient.toLowerCase());
+    let userRewardEntity = await mockDb.entities.UserReward.get(recipient.toLowerCase());
     assert.equal(userRewardEntity.id, recipient.toLowerCase());
     assert.equal(userRewardEntity.reward, 0);
 
-    let userDailyRewardEntity = mockDb.entities.UserDailyReward.get(recipient.toLowerCase());
+    let userDailyRewardEntity = await mockDb.entities.UserDailyReward.get(recipient.toLowerCase());
     assert.equal(userDailyRewardEntity.id, recipient.toLowerCase());
     assert.equal(userDailyRewardEntity.reward, 0);
 
-    let totalRewardEntity = mockDb.entities.TotalReward.get(TotalReward.id);
+    let totalRewardEntity = await mockDb.entities.TotalReward.get(TotalReward.id);
     assert.equal(totalRewardEntity.reward, TotalReward.reward);
 
-    let schemaAttestationCounterEntity = mockDb.entities.SchemaAttestationCounter.get(mockData.schema.uid);
+    let schemaAttestationCounterEntity = await mockDb.entities.SchemaAttestationCounter.get(mockData.schema.uid);
     assert.equal(schemaAttestationCounterEntity.count, 0);
   });
 
-  it("ZAS Attest Duplicate", () => {
+  it("ZAS Attest Duplicate", async () => {
     nextBlock();
 
     let recipient = Addresses.defaultAddress;
@@ -115,7 +115,7 @@ describe("ZAS contract event tests", () => {
     let mockZasAttestedEvent = createMockZasAttestedEvent(
       chainId1, recipient, mockData.attestation.uid, mockData.schema.uid, mockData.attestation.nullifier);
 
-    mockDb = Zas.Attested.processEvent({
+    mockDb = await Zas.Attested.processEvent({
       event: mockZasAttestedEvent,
       mockDb: mockDb,
     });
@@ -125,30 +125,30 @@ describe("ZAS contract event tests", () => {
     mockZasAttestedEvent = createMockZasAttestedEvent(
       chainId2, recipient, mockData.attestation.uid, mockData.schema.uid, mockData.attestation.nullifier);
 
-    mockDb = Zas.Attested.processEvent({
+    mockDb = await Zas.Attested.processEvent({
       event: mockZasAttestedEvent,
       mockDb: mockDb,
     });
 
-    let nonceEntity = mockDb.entities.Nonce.get(nonceHash(mockData.schema.uid, mockData.attestation.nullifier));
+    let nonceEntity = await mockDb.entities.Nonce.get(nonceHash(mockData.schema.uid, mockData.attestation.nullifier));
     assert.equal(nonceEntity.revocationTime, 0);
 
-    let attestationEntity = mockDb.entities.Attestation.get(uidHash(mockData.attestation.uid, chainId1));
+    let attestationEntity = await mockDb.entities.Attestation.get(uidHash(mockData.attestation.uid, chainId1));
     assert.equal(attestationEntity.revocationTime, 0);
     assert.equal(attestationEntity.reward, mockData.schema.reward);
 
-    attestationEntity = mockDb.entities.Attestation.get(uidHash(mockData.attestation.uid, chainId2));
+    attestationEntity = await mockDb.entities.Attestation.get(uidHash(mockData.attestation.uid, chainId2));
     assert.equal(attestationEntity.revocationTime, 0);
     assert.equal(attestationEntity.reward, 0);
 
-    let userRewardEntity = mockDb.entities.UserReward.get(recipient.toLowerCase());
+    let userRewardEntity = await mockDb.entities.UserReward.get(recipient.toLowerCase());
     assert.equal(userRewardEntity.id, recipient.toLowerCase());
     assert.equal(userRewardEntity.reward, mockData.schema.reward);
 
-    let totalRewardEntity = mockDb.entities.TotalReward.get(TotalReward.id);
+    let totalRewardEntity = await mockDb.entities.TotalReward.get(TotalReward.id);
     assert.equal(totalRewardEntity.reward, TotalReward.reward - mockData.schema.reward);
 
-    let schemaAttestationCounterEntity = mockDb.entities.SchemaAttestationCounter.get(mockData.schema.uid);
+    let schemaAttestationCounterEntity = await mockDb.entities.SchemaAttestationCounter.get(mockData.schema.uid);
     assert.equal(schemaAttestationCounterEntity.count, 2);
   });
 });
