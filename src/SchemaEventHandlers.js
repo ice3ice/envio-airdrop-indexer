@@ -19,7 +19,7 @@ Schema.SchemaRegistered.handler(async ({ event, context }) => {
       checkIn: schemaData.checkIn,
       revocationTime: 0,
       blockTimestamp: event.block.timestamp,
-      transactionHash: event.block.hash,
+      transactionHash: event.transaction.hash,
     };
 
     context.ZSchema.set(schemaEntity);

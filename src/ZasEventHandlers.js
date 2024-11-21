@@ -25,7 +25,7 @@ Zas.Attested.handler(async ({ event, context }) => {
     revocationTime: 0,
     reward: 0,
     blockTimestamp: event.block.timestamp,
-    transactionHash: event.block.hash
+    transactionHash: event.transaction.hash
   };
 
   const schemaEntity = await context.ZSchema.get(schemaId);
