@@ -87,8 +87,7 @@ describe("Schema contract event tests", () => {
       reward: 10,
       checkIn: true,
       blockTimestamp: 0,
-      transactionHash: undefined,
-      // transactionHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
+      transactionHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
     });
   });
 
@@ -111,8 +110,7 @@ describe("Schema contract event tests", () => {
       reward: 100,
       checkIn: false,
       blockTimestamp: 0,
-      transactionHash: undefined,
-      // transactionHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
+      transactionHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
     });
   });
 
@@ -135,8 +133,7 @@ describe("Schema contract event tests", () => {
       reward: 100,
       checkIn: false,
       blockTimestamp: 0,
-      transactionHash: undefined,
-      // transactionHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
+      transactionHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
     });
   });
 });

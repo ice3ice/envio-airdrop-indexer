@@ -90,3 +90,7 @@ networks:
         address: "0x90b7164F39446c196b488A9F4441702C3Fa74646"
       - name: Zas
         address: "0x44223d775CaA443fE68F31f49cbF16af2bc1EcE3"
+field_selection:
+  transaction_fields:
+    - "hash"
+    - "transactionIndex"
