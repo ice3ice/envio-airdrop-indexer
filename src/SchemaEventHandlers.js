@@ -4,7 +4,7 @@ const { parseSchemaData } = require('./utils');
 Schema.SchemaRegistered.handler(async ({ event, context }) => {
   const uid = event.params.uid.toString().toLowerCase();
 
-  // console.log(`SchemaRegistered for ${uid} at blockTimestamp ${event.block.timestamp}`);
+  console.log(`SchemaRegistered for ${uid} at blockTimestamp ${event.block.timestamp}`);
 
   let schemaEntity = await context.ZSchema.get(uid)
   if (!schemaEntity) {
