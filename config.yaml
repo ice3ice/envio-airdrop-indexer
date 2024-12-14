@@ -84,6 +84,8 @@ networks:
       - name: Zas
         address: "0x3b30D7C4e5aa3d7dA11431aF23e8D1F7D25bB0B8"
   - id: 196 # XLayer
+    rpc_config:
+      url: https://rpc.xlayer.tech
     start_block: 1672795
     contracts:
       - name: Schema
